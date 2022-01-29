@@ -1,8 +1,6 @@
-package com.teampolymer.polymer.scripts;
+package com.teampolymer.polymer.scripts
 
-import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod
 
 @Mod("polymer-scripts")
-object PolymerScripts {
-
-}
+object PolymerScripts
