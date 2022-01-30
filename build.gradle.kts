@@ -151,7 +151,7 @@ dependencies {
     api("org.jetbrains.kotlin:kotlin-scripting-jvm-host:1.6.10")
 
     val fg = project.extensions.getByType<DependencyManagementExtension>()
-    implementation(fg.deobf("com.teampolymer:polymer-core:+"))
+    implementation(fg.deobf("com.github.teampolymer:polymer-core:latest"))
 }
 tasks.jar {
     manifest {
