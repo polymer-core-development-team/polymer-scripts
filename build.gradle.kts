@@ -3,6 +3,7 @@ import net.minecraftforge.gradle.userdev.DependencyManagementExtension
 import net.minecraftforge.gradle.userdev.UserDevExtension
 import java.text.SimpleDateFormat
 import java.util.*
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 buildscript {
     repositories {
@@ -18,8 +19,9 @@ buildscript {
 plugins {
     kotlin("jvm") version "1.5.31"
     kotlin("plugin.serialization") version "1.5.31"
+    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("java")
 }
-
 apply {
     plugin("net.minecraftforge.gradle")
 }
@@ -93,6 +95,30 @@ repositories {
     }
 
 }
+tasks.withType<Jar> {
+    archiveClassifier.set("raw")
+}
+
+
+val shadowJar = tasks.withType<ShadowJar> {
+    archiveClassifier.set("")
+    dependencies {
+        include(dependency("org.jetbrains.kotlin:kotlin-scripting-common"))
+        include(dependency("org.jetbrains.kotlin:kotlin-scripting-jvm-host"))
+        include(dependency("org.jetbrains.kotlin:kotlin-scripting-jvm"))
+        include(dependency("org.jetbrains.kotlin:kotlin-script-runtime"))
+        include(dependency("org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable"))
+        include(dependency("org.jetbrains.kotlin:kotlin-scripting-compiler-impl-embeddable"))
+        include(dependency("org.jetbrains.kotlin:kotlin-compiler-embeddable"))
+        include(dependency("org.jetbrains.kotlin:kotlin-daemon-embeddable"))
+        include(dependency("org.jetbrains.intellij.deps:trove4j"))
+    }
+}
+
+
+
+
+tasks.build.get().dependsOn(shadowJar)
 
 dependencies {
     // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
@@ -103,11 +129,13 @@ dependencies {
     implementation("thedarkcolour:kotlinforforge:1.16.0")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.10")
 
+    api("org.jetbrains.kotlin:kotlin-scripting-common:1.6.10")
+    api("org.jetbrains.kotlin:kotlin-scripting-jvm:1.6.10")
+    api("org.jetbrains.kotlin:kotlin-scripting-jvm-host:1.6.10")
+
     val fg = project.extensions.getByType<DependencyManagementExtension>()
-
-
+    implementation(fg.deobf("com.teampolymer:polymer-core:+"))
 }
-
 tasks.jar {
     manifest {
         val time = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(Date())
