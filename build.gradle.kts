@@ -8,12 +8,14 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 buildscript {
     repositories {
         maven("https://maven.minecraftforge.net")
+        maven("https://maven.parchmentmc.org")
         mavenCentral()
     }
     dependencies {
         classpath(group = "net.minecraftforge.gradle", name = "ForgeGradle", version = "5.1.+") {
             isChanging = true
         }
+        classpath("org.parchmentmc:librarian:1.+")
     }
 }
 plugins {
@@ -26,6 +28,7 @@ plugins {
 
 apply {
     plugin("net.minecraftforge.gradle")
+    plugin("org.parchmentmc.librarian.forgegradle")
 }
 
 scmVersion {
@@ -64,7 +67,7 @@ println(
 
 
 configure<UserDevExtension> {
-    mappings("official", "1.16.5")
+    mappings("parchment", "2022.03.06-1.16.5")
 
     accessTransformer(file("src/main/resources/META-INF/polymer_at.cfg"))
     runs {
